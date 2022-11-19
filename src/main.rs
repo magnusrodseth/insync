@@ -3,7 +3,7 @@ mod tools;
 
 use colored::Colorize;
 use dialoguer::MultiSelect;
-use std::process::{exit, Command};
+use std::process::exit;
 
 use crate::tools::{update, Tool};
 
