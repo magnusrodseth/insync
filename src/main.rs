@@ -2,36 +2,26 @@ use strum::IntoEnumIterator;
 mod tools;
 
 use colored::Colorize;
-use dialoguer::MultiSelect;
 use std::process::exit;
 
-use crate::tools::{update, Tool};
+use crate::tools::{select_tools, update, Tool};
 
-/// The `insync` application is a simple command line tool that allows me to
-/// ensure popularly used tools are up to date.
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Welcome prompt for the user
+fn welcome() {
     println!(
         "{}",
         "🔄 Welcome to insync, ensuring your tools are up to date."
             .green()
             .bold()
     );
+}
 
-    println!(
-        "{}",
-        "Please select the tools you would like to update.".bold()
-    );
-    let subtitle = format!(
-        "❓ Press {} to select, and {} to finish. Selecting no tools will exit the application.",
-        "SPACE".bold(),
-        "ENTER".bold()
-    );
-    println!();
-    println!("{}", subtitle);
+/// The `insync` application is a simple command line tool that allows me to
+/// ensure popularly used tools are up to date.
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    welcome();
 
     let tools = Tool::iter().collect::<Vec<_>>();
-    let chosen: Vec<usize> = MultiSelect::new().items(&tools).interact()?;
+    let chosen = select_tools(&tools)?;
 
     if chosen.is_empty() {
         println!("👋 No tools selected. Exiting.");
